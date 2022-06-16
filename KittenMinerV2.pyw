@@ -10,8 +10,6 @@ import bitcoin
 import webbrowser
 from PySimpleGUI import *
 
-theme('DarkTeal9')
-
 TQMtrEVFyrqdRTuoKzEYNcRSaqDlHQODEFupNOLYtZMOhplmbPRQdNDJaFdEkugL = tk.Tk()
 CzRCiiLYhfkILmMfuhoeEoNibGSCgOlBMCOewISiFTqoEXnSZjAujajKHUMgiKAF = 600
 UbYidQwHsxgxYcKAhAergbrYmnMfNxAYHlNKZtHYdYfiSdApUBuoQBTywnnmHWxe = 600
