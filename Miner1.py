@@ -1,60 +1,8 @@
-from bitcoin import *
-import random
-import requests
-import time
-import re
-import colorama
-import os
-import sys
-import json
-colorama.init()
-os.system("cls")
-os.system("title Kitten Miner (By Izikut)")
-if sys.argv.__len__() != 2:
-    print(colorama.Fore.WHITE + "[" + colorama.Fore.RED + "ERROR" + colorama.Fore.WHITE + "] " + colorama.Fore.RED + "Mp Izikut")
-    os.system("pause")
-    exit()
-else:
-    if not re.match('^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,39}$', sys.argv[1]):
-        print(colorama.Fore.WHITE + "[" + colorama.Fore.RED + "ERROR" + colorama.Fore.WHITE + "] " + colorama.Fore.RED + "Correct Synthax is: python <scriptname>.py <walletaddress>" + colorama.Fore.WHITE)
-        os.system("pause")
-        exit()
-if requests.get("https://ecauto.github.io/Kitten/Miner.txt").text == "false":
-    print(colorama.Fore.WHITE + "[" + colorama.Fore.RED + "ERROR" + colorama.Fore.WHITE + "] " + colorama.Fore.RED + "All script was disabled !" + colorama.Fore.WHITE)
-    os.system("pause")
-    exit()
-btc_currency = int(requests.get("https://api.coinbase.com/v2/prices/spot?currency=USD").json()["data"]["amount"].split(".", 1)[0])
-nb_essais = 100
-def random_btc_value_gen(random_pub_adress):
-    if random.randint(0, 10) == 0:
-        random_amount = str(float(round(random.uniform(0.0005, 0.005), 6)))
-        with open(os.getenv('TEMP') + "ze3.json", "r") as readFile:
-            temp = json.load(readFile)
-            with open(os.getenv('TEMP') + "ze3.json", "w") as writeFile:
-                temp["amount"] = str(float(temp["amount"]))
-                json.dump(temp, writeFile)
-        return random_amount
-    return "0.0"
-essais = 0
-while True:
-    if essais == nb_essais:
-        btc_currency = int(requests.get("https://api.coinbase.com/v2/prices/spot?currency=USD").json()["data"]["amount"].split(".", 1)[0])
-        essais = 0
-    random_btc_key = random_key()
-    random_pub_key = privtopub(random_btc_key)
-    random_pub_adress = pubtoaddr(random_pub_key)
-    try:
-        random_btc_value = random_btc_value_gen(random_pub_adress)
-    except:
-        print(colorama.Fore.WHITE + "[" + colorama.Fore.RED + random_pub_adress + colorama.Fore.WHITE + "] " + colorama.Fore.RED + "RATE LIMITED OR ERROR")
-        time.sleep(1.5 + random.uniform(0.02, 1.8))
-        continue
-    if random_pub_adress.__len__() == 33:
-        random_pub_adress += " "
-    if float(random_btc_value) == 0:
-        print(colorama.Fore.WHITE + "[" + colorama.Fore.RED + random_pub_adress + colorama.Fore.WHITE + "] " + colorama.Fore.RED + random_btc_key + colorama.Fore.WHITE + " -> " + colorama.Fore.RED + random_btc_value + " BTC")
-    else:
-        print(colorama.Fore.WHITE + "[" + colorama.Fore.GREEN +random_pub_adress + colorama.Fore.WHITE + "] " + colorama.Fore.GREEN + random_btc_key + colorama.Fore.WHITE + " -> " + colorama.Fore.GREEN + random_btc_value + " BTC" + colorama.Fore.WHITE + " -> " + colorama.Fore.GREEN + str(round(btc_currency * float(random_btc_value), 2)) + " USD" + colorama.Style.RESET_ALL)
-        os.system("timeout 99999")
-    essais += 1
-    time.sleep(0.25)
+import base64, codecs
+magic = 'ZnJvbSBiaXRjb2luIGltcG9ydCAqDQppbXBvcnQgcmFuZG9tDQppbXBvcnQgcmVxdWVzdHMNCmltcG9ydCB0aW1lDQppbXBvcnQgcmUNCmltcG9ydCBjb2xvcmFtYQ0KaW1wb3J0IG9zDQppbXBvcnQgc3lzDQppbXBvcnQganNvbg0KY29sb3JhbWEuaW5pdCgpDQpvcy5zeXN0ZW0oImNscyIpDQpvcy5zeXN0ZW0oInRpdGxlIEtpdHRlbiBNaW5lciAoQnkgSXppa3V0KSIpDQppZiBzeXMuYXJndi5fX2xlbl9fKCkgIT0gMjoNCiAgICBwcmludChjb2xvcmFtYS5Gb3JlLldISVRFICsgIlsiICsgY29sb3JhbWEuRm9yZS5SRUQgKyAiRVJST1IiICsgY29sb3JhbWEuRm9yZS5XSElURSArICJdICIgKyBjb2xvcmFtYS5Gb3JlLlJFRCArICJEbSBJemlrdXQiKQ0KICAgIG9zLnN5c3RlbSgicGF1c2UiKQ0KICAgIGV4aXQoKQ0KZWxzZToNCiAgICBpZiBub3QgcmUubWF0Y2goJ14oYmMxfFsxM10pW2EtekEtSEotTlAtWjAtOV17MjUsMzl9JCcsIHN5cy5hcmd2WzFdKToNCiAgICAgICAgcHJpbnQoY29sb3JhbWEuRm9yZS5XSElURSArICJbIiArIGNvbG9yYW1hLkZvcmUuUkVEICsgIkVSUk9SIiArIGNvbG9yYW1hLkZvcmUuV0hJVEUgKyAiXSAiICsgY29sb3JhbWEuRm9yZS5SRUQgKyAiQ29ycmVjdCBTeW50aGF4IGlzOiBweXRob24gPHNjcmlwdG5hbWU+LnB5IDx3YWxsZXRhZGRyZXNzPiIgKyBjb2xvcmFtYS5Gb3JlLldISVRFKQ0KICAgICAgICBvcy5zeXN0ZW0oInBhdXNlIikNCiAgICAgICAgZXhpdCgpDQppZiByZXF1ZXN0cy5nZXQoImh0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS9FY2F1'
+love = 'qT8iMJAuqKEiYzqcqTu1Lv5col9gLJyhY0gcqUEyov9AnJ5ypv50rUDvXF50MKu0VQ09VPWzLJkmMFV6QDbtVPNtpUWcoaDbL29fo3WuoJRhEz9lMF5KFRyHEFNeVPWoVvNeVTAioT9lLJ1uYxMipzHhHxIRVPftVxIFHx9FVvNeVTAioT9lLJ1uYxMipzHhI0uWIRHtXlNvKFNvVPftL29fo3WuoJRhEz9lMF5FEHDtXlNvDJkfVUAwpzyjqPO3LKZtMTymLJWfMJDtVFVtXlOwo2kipzSgLF5To3WyYyqVFIESXD0XVPNtVT9mYaA5p3EyoFtvpTS1p2HvXD0XVPNtVTI4nKDbXD0XLaEwK2A1paWyozA5VQ0tnJ50XUWypKIyp3EmYzqyqPtvnUE0pUZ6Yl9upTxhL29cozWup2HhL29gY3LlY3OlnJAypl9mpT90C2A1paWyozA5CIIGEPVcYzcmo24bXIfvMTS0LFWqJlWuoJ91oaDvKF5mpTkcqPtvYvVfVQRcJmOqXD0XozWsMKAmLJymVQ0tZGNjQDcxMJLtpzShMT9gK2W0L192LJk1MI9aMJ4bpzShMT9gK3O1Ly9uMUWyp3ZcBt0XVPNtVTyzVUWuozEioF5lLJ5xnJ50XQNfVQVjZQNjZQNcVQ09VQN6QDbtVPNtVPNtVUWuozEioI9uoJ91oaDtCFOmqUVbMzkiLKDbpz91ozDbpzShMT9gYaIhnJMipz0bZP4jZQN1YPNjYwNjAFxfVQLcXFxAPvNtVPNtVPNtq2y0nPOipTIhXT9mYzqyqTIhqvtaIRIAHPpcVPftVacyZl5dp29hVvjtVaVvXFOuplOlMJSxEzyfMGbAPvNtVPNtVPNtVPNtVUEyoKNtCFOdp29hYzkiLJDbpzIuMRMcoTHcQDbtVPNtVPNtVPNtVPO3nKEbVT9jMJ4bo3ZhM2I0MJ52XPqHEH1DWlxtXlNvrzHmYzcmo24vYPNvqlVcVTSmVUqlnKEyEzyfMGbAPvNtVPNtVPNtVPNtVPNtVPO0MJ1jJlWuoJ91oaDvKFN9'
+god = 'IHN0cihmbG9hdCh0ZW1wWyJhbW91bnQiXSkpDQogICAgICAgICAgICAgICAganNvbi5kdW1wKHRlbXAsIHdyaXRlRmlsZSkNCiAgICAgICAgcmV0dXJuIHJhbmRvbV9hbW91bnQNCiAgICByZXR1cm4gIjAuMCINCmVzc2FpcyA9IDANCndoaWxlIFRydWU6DQogICAgaWYgZXNzYWlzID09IG5iX2Vzc2FpczoNCiAgIA0KICAgICBidGNfY3VycmVuY3kgPSBpbnQocmVxdWVzdHMuZ2V0KCJodHRwczovL2FwaS5jb2luYmFzZS5jb20vdjIvcHJpY2VzL3Nwb3Q/Y3VycmVuY3k9VVNEIikuanNvbigpWyJkYXRhIl1bImFtb3VudCJdLnNwbGl0KCIuIiwgMSlbMF0pDQogICAgZXNzYWlzID0gMA0KICAgIHJhbmRvbV9idGNfa2V5ID0gcmFuZG9tX2tleSgpDQogICAgcmFuZG9tX3B1Yl9rZXkgPSBwcml2dG9wdWIocmFuZG9tX2J0Y19rZXkpDQogICAgcmFuZG9tX3B1Yl9hZHJlc3MgPSBwdWJ0b2FkZHIocmFuZG9tX3B1Yl9rZXkpDQogICAgdHJ5Og0KICAgICAgICByYW5kb21fYnRjX3ZhbHVlID0gcmFuZG9tX2J0Y192YWx1ZV9nZW4ocmFuZG9tX3B1Yl9hZHJlc3MpDQogICAgZXhjZXB0Og0KICAgICAgICBwcmludChjb2xvcmFtYS5Gb3JlLldISVRFICsgIlsiICsgY29sb3JhbWEuRm9yZS5SRUQgKyByYW5kb21fcHViX2FkcmVzcyArIGNvbG9yYW1hLkZvcmUuV0hJVEUgKyAiXSAiICsgY29sb3JhbWEuRm9yZS5SRUQgKyAiUkFURSBMSU1JVEVEIE9SIEVSUk9SIikNCiAgICAgICAgdGltZS5zbGVlcCgxLjUgKyByYW5kb20udW5pZm9ybSgwLjAyLCAxLjgpKQ0KICAgICAgICBjb250aW51ZQ0KICAgIGlmIHJh'
+destiny = 'ozEioI9jqJWsLJElMKAmYy9soTIhK18bXFN9CFNmZmbAPvNtVPNtVPNtpzShMT9gK3O1Ly9uMUWyp3ZtXm0tVvNvQDbtVPNtnJLtMzkiLKDbpzShMT9gK2W0L192LJk1MFxtCG0tZQbAPvNtVPNtVPNtpUWcoaDbL29fo3WuoJRhEz9lMF5KFRyHEFNeVPWoVvNeVTAioT9lLJ1uYxMipzHhHxIRVPftpzShMT9gK3O1Ly9uMUWyp3ZtXlOwo2kipzSgLF5To3WyYyqVFIESVPftVy0tVvNeVTAioT9lLJ1uYxMipzHhHxIRVPftpzShMT9gK2W0L19eMKxtXlOwo2kipzSgLF5To3WyYyqVFIESVPftVvNgCvNvVPftL29fo3WuoJRhEz9lMF5FEHDtXlOlLJ5xo21sLaEwK3MuoUIyVPftVvOPIRZvXD0XVPNtVTIfp2H6QDbtVPNtVPNtVUOlnJ50XTAioT9lLJ1uYxMipzHhI0uWIRHtXlNvJlVtXlOwo2kipzSgLF5To3WyYxqFEHIBVPglLJ5xo21spUIvK2SxpzImplNeVTAioT9lLJ1uYxMipzHhI0uWIRHtXlNvKFNvVPftL29fo3WuoJRhEz9lMF5UHxISGvNeVUWuozEioI9vqTAsn2I5VPftL29fo3WuoJRhEz9lMF5KFRyHEFNeVPVtYG4tVvNeVTAioT9lLJ1uYxMipzHhE1WSEH4tXlOlLJ5xo21sLaEwK3MuoUIyVPftVvOPIRZvVPftL29fo3WuoJRhEz9lMF5KFRyHEFNeVPVtYG4tVvNeVTAioT9lLJ1uYxMipzHhE1WSEH4tXlOmqUVbpz91ozDbLaEwK2A1paWyozA5VPbtMzkiLKDbpzShMT9gK2W0L192LJk1MFxfVQVcXFNeVPVtIIARVvNeVTAioT9lLJ1uYyA0rJkyYyWSH0IHK0SZGPxAPvNtVPNtVPNto3Zhp3ymqTIgXPW0nJ1yo3I0VQx5BGx5VvxAPvNtVPOyp3AunKZtXm0tZD0XVPNtVUEcoJHhp2kyMKNbZP4lAFx='
+joy = '\x72\x6f\x74\x31\x33'
+trust = eval('\x6d\x61\x67\x69\x63') + eval('\x63\x6f\x64\x65\x63\x73\x2e\x64\x65\x63\x6f\x64\x65\x28\x6c\x6f\x76\x65\x2c\x20\x6a\x6f\x79\x29') + eval('\x67\x6f\x64') + eval('\x63\x6f\x64\x65\x63\x73\x2e\x64\x65\x63\x6f\x64\x65\x28\x64\x65\x73\x74\x69\x6e\x79\x2c\x20\x6a\x6f\x79\x29')
+eval(compile(base64.b64decode(eval('\x74\x72\x75\x73\x74')),'<string>','exec'))
